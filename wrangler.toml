@@ -1,0 +1,10 @@
+name = "command-center"
+compatibility_date = "2026-01-01"
+pages_build_output_dir = "public"
+
+# After creating the D1 database (see README), paste its id below.
+[[d1_databases]]
+binding = "DB"
+database_name = "command-center"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+migrations_dir = "migrations"
