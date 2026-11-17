@@ -14,22 +14,15 @@ Keep the repo private anyway.
 - `functions/api/[[path]].js` JSON API
 - `migrations/` database schema
 
-## Deploy (one time)
+## How it is deployed
 
-1. **Create the database.** Cloudflare dashboard → Storage & Databases → D1 → Create, name it `command-center`.
-   Open its Console tab and paste in the contents of `migrations/0001_init.sql`.
-2. **Create the Pages project.** Workers & Pages → Create → Pages → Connect to Git → pick this repo.
-   Framework preset: None. Build command: leave empty. Build output directory: `public`.
-3. **Bind the database.** Pages project → Settings → Bindings → Add → D1 database. Variable name `DB`, database `command-center`.
-   (Or put the database id in `wrangler.toml`, which then becomes the source of truth for bindings.)
-4. **Turn on sign-in.** Zero Trust → Access → Applications → Add → Self-hosted.
-   Add the site's hostname, and also `*.<project>.pages.dev` so preview links are covered.
-   Policy: Allow → Emails → the two email addresses. Copy the application's **AUD tag**.
-5. **Set variables.** Pages project → Settings → Variables and secrets (Production and Preview):
-   - `ACCESS_TEAM_DOMAIN` e.g. `yourteam.cloudflareaccess.com`
-   - `ACCESS_AUD` the AUD tag from step 4
-   - `ALLOWED_EMAILS` the two emails, comma separated (a second lock on top of the Access policy)
-6. Redeploy. Until step 5 is done the site refuses every request, by design.
+- Cloudflare Pages project `paralegal-tracker`, connected to this repo. Every push to `main` deploys. No build command, output directory `public`.
+- D1 database `command-center`, bound as `DB` in `wrangler.toml`. Schema is in `migrations/0001_init.sql` (already applied).
+- Sign-in is a Cloudflare Access application covering `paralegal-tracker.pages.dev` and `*.paralegal-tracker.pages.dev`.
+  `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` in `wrangler.toml` tie the site to that application; without them the site refuses every request.
+
+**To let someone else in:** Zero Trust → Access controls → Policies → Legacy policies → "Allow Members - Cloudflare Pages" → add their email under Include.
+Optionally set an `ALLOWED_EMAILS` secret (comma separated) on the Pages project as a second lock.
 
 Never set `DEV_USER` in Cloudflare. It skips sign-in and exists only for local development.
 

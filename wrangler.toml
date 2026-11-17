@@ -7,3 +7,9 @@ binding = "DB"
 database_name = "command-center"
 database_id = "f5ae5901-c50b-455e-b778-15b20ba0ded5"
 migrations_dir = "migrations"
+
+# Sign-in gate: identifies the Cloudflare Access application that protects this site.
+# These are identifiers, not secrets. Who may sign in is set in the Access policy.
+[vars]
+ACCESS_TEAM_DOMAIN = "lucky-wave-2657.cloudflareaccess.com"
+ACCESS_AUD = "7c0415729d7973a9df688a0ca7b52c135fa6d549b42bd77cd3b09be188ff8001"
